@@ -1,0 +1,103 @@
+{"q": "My check engine light just turned on, what does it mean and what should I do?", "section": "OPERATING YOUR VEHICLE"}
+{"q": "The battery is dead, how do I jump start my car safely?", "section": "EMERGENCY SERVICE"}
+{"q": "How do I change a flat tire and where is the jack located?", "section": "EMERGENCY SERVICE"}
+{"q": "What do the different dashboard warning lights mean?", "section": "OPERATING YOUR VEHICLE"}
+{"q": "My tire pressure warning light is on, what should be the correct tire pressure?", "section": "OPERATING YOUR VEHICLE"}
+{"q": "How do I check and top up engine oil level?", "section": "OPERATING YOUR VEHICLE"}
+{"q": "Where is the fuse box and which fuse controls the headlights?", "section": "SPECIFICATIONS"}
+{"q": "How do I use the air conditioning and defrost function?", "section": "OTHER CONTROLS AND EQUIPMENT"}
+{"q": "What should I do if my car breaks down on the highway?", "section": "OPERATING YOUR VEHICLE"}
+{"q": "How do I connect a trailer for towing?", "section": "VEHICLE LOADING AND TOWING"}
+{"q": "What type of fuel should I use for my vehicle?", "section": "FUEL RECOMMENDATION"}
+{"q": "How often should I service my car and change the oil?", "section": "INSPECTION AND MAINTENANCE"}
+{"q": "The airbag warning light is on, what does this indicate?", "section": "INSPECTION AND MAINTENANCE"}
+{"q": "How do I adjust the seats and steering wheel for comfort?", "section": "TABLE OF CONTENTS FUEL RECOMMENDATION TABLE OF CONTENTS TABLE OF CONTENTS TABLE OF CONTENTS TABLE OF CONTENTS 1"}
+{"q": "What checks should I perform before starting a long drive?", "section": "OPERATING YOUR VEHICLE"}
+{"q": "My car won't start, what could be the problem?", "section": "EMERGENCY SERVICE"}
+{"q": "How do I check the coolant level and top it up?", "section": "EMERGENCY SERVICE"}
+{"q": "What should I do if I smell burning inside the car?", "section": "OPERATING YOUR VEHICLE"}
+{"q": "How do I turn on the hazard lights?", "section": "EMERGENCY SERVICE"}
+{"q": "Where is the spare tire located in my vehicle?", "section": "EMERGENCY SERVICE"}
+{"q": "How do I check brake fluid level?", "section": "OPERATING YOUR VEHICLE"}
+{"q": "What does the ABS warning light mean?", "section": "OPERATING YOUR VEHICLE"}
+{"q": "How do I clean the car exterior to protect the paint?", "section": "APPEARANCE CARE"}
+{"q": "How do I use the parking brake properly?", "section": "EMERGENCY SERVICE"}
+{"q": "What is the recommended engine oil type for my car?", "section": "FUEL RECOMMENDATION"}
+{"q": "How do I check if the spark plugs are working?", "section": "EMERGENCY SERVICE"}
+{"q": "My car is overheating, what should I do?", "section": "OPERATING YOUR VEHICLE"}
+{"q": "How do I operate the manual transmission correctly?", "section": "INSPECTION AND MAINTENANCE"}
+{"q": "What should I do if the brakes feel spongy?", "section": "APPEARANCE CARE"}
+{"q": "How do I use cruise control on the highway?", "section": "TABLE OF CONTENTS FUEL RECOMMENDATION TABLE OF CONTENTS TABLE OF CONTENTS TABLE OF CONTENTS TABLE OF CONTENTS 1"}
+{"q": "Where is the vehicle identification number located?", "section": "GENERAL INFORMATION"}
+{"q": "How do I reset the trip meter?", "section": "EMERGENCY SERVICE"}
+{"q": "What does the engine oil pressure warning mean?", "section": "OPERATING YOUR VEHICLE"}
+{"q": "How do I open the hood of the car?", "section": "EMERGENCY SERVICE"}
+{"q": "What is the correct way to wash the car windshield?", "section": "APPEARANCE CARE"}
+{"q": "How do I adjust the side mirrors?", "section": "EMERGENCY SERVICE"}
+{"q": "What should I do if the car pulls to one side while driving?", "section": "INSPECTION AND MAINTENANCE"}
+{"q": "How do I check transmission fluid level?", "section": "OPERATING YOUR VEHICLE"}
+{"q": "What does the battery charging warning light indicate?", "section": "EMERGENCY SERVICE"}
+{"q": "How do I use the reverse parking sensors?", "section": "BEFORE DRIVING"}
+{"q": "What is the maximum towing capacity of my vehicle?", "section": "VEHICLE LOADING AND TOWING"}
+{"q": "How do I apply tire dressing to protect the tires?", "section": "EMERGENCY SERVICE"}
+{"q": "What should I do if the clutch slips?", "section": "EMERGENCY SERVICE"}
+{"q": "How do I check power steering fluid?", "section": "EMERGENCY SERVICE"}
+{"q": "What does the low fuel warning mean and how far can I drive?", "section": "OPERATING YOUR VEHICLE"}
+{"q": "How do I use the dashboard trip computer?", "section": "EMERGENCY SERVICE"}
+{"q": "What is the recommended tire rotation pattern?", "section": "EMERGENCY SERVICE"}
+{"q": "How do I clean the interior leather seats?", "section": "APPEARANCE CARE"}
+{"q": "What should I do if the engine stalls while driving?", "section": "EMERGENCY SERVICE"}
+{"q": "How do I check the wiper blade condition?", "section": "INSPECTION AND MAINTENANCE"}
+{"q": "What does the traction control warning light mean?", "section": "OPERATING YOUR VEHICLE"}
+{"q": "How do I use the daytime running lights?", "section": "OPERATING YOUR VEHICLE"}
+{"q": "What is the correct tire pressure for front and rear tires?", "section": "SPECIFICATIONS"}
+{"q": "How do I remove scratches from the car paint?", "section": "APPEARANCE CARE"}
+{"q": "What should I do if the horn stops working?", "section": "EMERGENCY SERVICE"}
+{"q": "How do I check the condition of the battery terminals?", "section": "1. ENGINE JOB"}
+{"q": "What does the door ajar warning indicate?", "section": "INSPECTION AND MAINTENANCE"}
+{"q": "How do I use the heated seats function?", "section": "OTHER CONTROLS AND EQUIPMENT"}
+{"q": "What is the recommended interval for changing air filters?", "section": "INSPECTION AND MAINTENANCE"}
+{"q": "How do I clean the headlights and taillights?", "section": "APPEARANCE CARE"}
+{"q": "What should I do if the transmission makes grinding noise?", "section": "INSPECTION AND MAINTENANCE"}
+{"q": "How do I check the brake pads wear?", "section": "OPERATING YOUR VEHICLE"}
+{"q": "What does the temperature gauge reading high mean?", "section": "OTHER CONTROLS AND EQUIPMENT"}
+{"q": "How do I operate the sunroof?", "section": "OTHER CONTROLS AND EQUIPMENT"}
+{"q": "What is the maximum roof load capacity?", "section": "VEHICLE LOADING AND TOWING"}
+{"q": "How do I protect the car interior from sun damage?", "section": "APPEARANCE CARE"}
+{"q": "What should I do if the windshield wiper stops working?", "section": "EMERGENCY SERVICE"}
+{"q": "How do I check the clutch fluid?", "section": "EMERGENCY SERVICE"}
+{"q": "What does the glow plug indicator mean in diesel vehicles?", "section": "OPERATING YOUR VEHICLE"}
+{"q": "How do I use the voice control system?", "section": "OTHER CONTROLS AND EQUIPMENT"}
+{"q": "What is the recommended coolant type?", "section": "FUEL RECOMMENDATION"}
+{"q": "How do I remove water spots from the car glass?", "section": "APPEARANCE CARE"}
+{"q": "What should I do if the car shakes at high speed?", "section": "APPEARANCE CARE"}
+{"q": "How do I check the drive belt condition?", "section": "INSPECTION AND MAINTENANCE"}
+{"q": "What does the lane departure warning mean?", "section": "TABLE OF CONTENTS FUEL RECOMMENDATION TABLE OF CONTENTS TABLE OF CONTENTS TABLE OF CONTENTS TABLE OF CONTENTS 1"}
+{"q": "How do I use the adaptive cruise control?", "section": "TABLE OF CONTENTS FUEL RECOMMENDATION TABLE OF CONTENTS TABLE OF CONTENTS TABLE OF CONTENTS TABLE OF CONTENTS 1"}
+{"q": "What is the correct procedure to break in a new car?", "section": "INSPECTION AND MAINTENANCE"}
+{"q": "How do I clean the alloy wheels?", "section": "APPEARANCE CARE"}
+{"q": "What should I do if fuel leaks from the car?", "section": "FUEL RECOMMENDATION"}
+{"q": "How do I check the shock absorbers condition?", "section": "1. ENGINE JOB"}
+{"q": "What does the forward collision warning indicate?", "section": "INSPECTION AND MAINTENANCE"}
+{"q": "How do I connect my phone via Bluetooth?", "section": "OTHER CONTROLS AND EQUIPMENT"}
+{"q": "What is the recommended frequency for wheel alignment?", "section": "INSPECTION AND MAINTENANCE"}
+{"q": "How do I protect the undercarriage from rust?", "section": "APPEARANCE CARE"}
+{"q": "What should I do if the car loses power while driving?", "section": "OPERATING YOUR VEHICLE"}
+{"q": "How do I check the exhaust for leaks?", "section": "OPERATING YOUR VEHICLE"}
+{"q": "What does the blind spot monitoring system do?", "section": "BEFORE DRIVING"}
+{"q": "How do I use the automatic climate control?", "section": "OTHER CONTROLS AND EQUIPMENT"}
+{"q": "What is the maximum weight I can carry in the trunk?", "section": "VEHICLE LOADING AND TOWING"}
+{"q": "How do I detail the car engine bay?", "section": "INSPECTION AND MAINTENANCE"}
+{"q": "What should I do if the brake pedal goes to the floor?", "section": "EMERGENCY SERVICE"}
+{"q": "How do I check the wheel bearing for wear?", "section": "EMERGENCY SERVICE"}
+{"q": "What does the hill start assist feature do?", "section": "EMERGENCY SERVICE"}
+{"q": "How do I program the garage door opener?", "section": "BEFORE DRIVING"}
+{"q": "What is the correct procedure to park on a hill?", "section": "VEHICLE LOADING AND TOWING"}
+{"q": "How do I remove tree sap from the car paint?", "section": "APPEARANCE CARE"}
+{"q": "What should I do if the starter motor fails?", "section": "EMERGENCY SERVICE"}
+{"q": "How do I check the timing belt replacement interval?", "section": "INSPECTION AND MAINTENANCE"}
+{"q": "What does the fuel efficiency display show?", "section": "OPERATING YOUR VEHICLE"}
+{"q": "How do I use the USB and AUX ports?", "section": "EMERGENCY SERVICE"}
+{"q": "What is the recommended procedure for cold weather starting?", "section": "OPERATING YOUR VEHICLE"}
+{"q": "How do I clean and condition rubber floor mats?", "section": "APPEARANCE CARE"}
+{"q": "What should I do if the car battery drains quickly?", "section": "OPERATING YOUR VEHICLE"}

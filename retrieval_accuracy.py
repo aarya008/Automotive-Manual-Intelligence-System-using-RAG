@@ -1,58 +1,68 @@
+import json
+import os
+import shutil
 import rag_text as rag
+from langchain_community.vectorstores.utils import filter_complex_metadata
+from hybrid_extractor import extract_hybrid_chunks, docs_from_hybrid_chunks
+from pdf_parser import parse_pdf_to_structured_blocks
+
 embeddings = rag.get_embeddings()
 
+pdf_path = r"C:\Users\Aarya\Downloads\Swift_Owner's_Manual.pdf"
+blocks = parse_pdf_to_structured_blocks(pdf_path)
+chunks = extract_hybrid_chunks(pdf_path, blocks)
+documents = docs_from_hybrid_chunks(chunks)
+documents = filter_complex_metadata(documents)
+
+print(f"Total chunks: {len(documents)}")
+
+sections = set(d.metadata.get("section_name", "") for d in documents)
+print(f"Unique sections ({len(sections)}):")
+for s in sorted(sections):
+    print(f"  - {s}")
+
+persist_dir = r"E:\Workspace\Projects\Owners_manual\.venv\RAG_pipeline_text\db"
+if os.path.exists(persist_dir):
+    shutil.rmtree(persist_dir)
+
 vectordb = rag.build_vectorstore(
-    documents=None,
+    documents=documents,
     embeddings=embeddings,
-    persist_dir=r"E:\Workspace\Projects\Owners_manual\.venv\RAG_pipeline_text\db"  
+    persist_dir=persist_dir
 )
 
-retriever = vectordb.as_retriever(search_kwargs={"k": 3})
+retriever = rag.get_retriever(vectordb, k=3)
 
+with open(r"E:\Workspace\Projects\Owners_manual\.venv\Automotive Manual Intelligence System using RAG\test_questions.txt", "r") as f:
+    test_questions = [json.loads(line) for line in f]
 
-test_questions = [
-    {"q": "What fuel should I use?", "section": "Fuel"},
-    {"q": "How to check brake fluid?", "section": "Brake"},
-    {"q": "What does warning mean?", "section": "Safety"},
-    {"q": "How do I open the hood of the car?", "section": "Maintenance"},
-    {"q": "What should I do if a warning light turns on?", "section": "Safety"},
-    {"q": "How often should periodic maintenance be done?", "section": "Maintenance"},
-    {"q": "Where is the fuse box located?", "section": "Electrical"},
-    {"q": "How do I adjust the steering wheel position?", "section": "Steering"},
-    {"q": "What is the capacity of the fuel tank?", "section": "Fuel"},
-    {"q": "What checks should be done before driving the vehicle?", "section": "Inspection"}
-]
-
-section_map = {
-    "Fuel": ["FUEL RECOMMENDATION"],
-    "Maintenance": ["INSPECTION AND MAINTENANCE"],
-    "Safety": ["BEFORE DRIVING", "WARNING"],
-    "Electrical": ["ELECTRICAL"],
-    "Steering": ["STEERING"],
-    "Inspection": ["INSPECTION AND MAINTENANCE"],
-    "Brake": ["BRAKE"],
-}
+print(f"\nLoaded {len(test_questions)} test questions")
 
 correct = 0
+failed = []
 
-for item in test_questions:
-    for i, item in enumerate(test_questions, 1):
-    # Retrieve documents
-        docs = retriever.invoke(item["q"])
+print("\n" + "="*60)
+print("RETRIEVAL TEST RESULTS")
+print("="*60)
+
+for i, item in enumerate(test_questions, 1):
+    docs = retriever.invoke(item["q"])
+    retrieved_section = docs[0].metadata.get("section_name", "")
     
-    # Get top result metadata
-    top_doc = docs[0]
-    retrieved_section = top_doc.metadata.get("section_name", "")
-
-    print("Q:", item["q"])
-    print("Expected:", item["section"])
-    print("Retrieved:", retrieved_section)
+    if item["section"].lower() in retrieved_section.lower() or retrieved_section.lower() in item["section"].lower():
+        correct += 1
+        print(f"[{i}] [PASS] {item['q'][:50]}...")
+        print(f"       -> {retrieved_section}")
+    else:
+        failed.append((item, retrieved_section))
+        print(f"[{i}] [FAIL] {item['q'][:50]}...")
+        print(f"       Expected: {item['section']}, Got: {retrieved_section}")
     print()
 
-    if item["section"].lower() in retrieved_section.lower():
-        returned_section = retrieved_section
-    if retrieved_section in section_map[item["section"]]:
-            correct += 1    
-
-accuracy = correct / len(test_questions)*100
-print("Retrieval Accuracy:", accuracy, "%")
+accuracy = (correct / len(test_questions)) * 100
+print("="*60)
+print(f"Total Questions: {len(test_questions)}")
+print(f"Correct: {correct}")
+print(f"Failed: {len(failed)}")
+print(f"Accuracy: {accuracy:.2f}%")
+print("="*60)
