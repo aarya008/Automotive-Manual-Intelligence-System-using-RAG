@@ -17,10 +17,10 @@ st.set_page_config(
 # SESSION STATE INIT
 # ─────────────────────────────────────────────
 def clear_temp_db():
-    persist_dir = "./temp_db"
-    if os.path.exists(persist_dir):
+    PERSIST_DIR = "/tmp/temp_db"
+    if os.path.exists(PERSIST_DIR):
         try:
-            shutil.rmtree(persist_dir)
+            shutil.rmtree(PERSIST_DIR)
             st.write("✅ Cleared persistent vector store from temp_db")
         except Exception as e:
             st.warning(f"Could not remove temp_db: {e}")
@@ -75,7 +75,7 @@ def load_models():
 # ─────────────────────────────────────────────
 def process_pdf(uploaded_file):
     """Save uploaded file to temp, build vector DB, return retriever."""
-    PERSIST_DIR = "./temp_db"
+    PERSIST_DIR = "/tmp/temp_db"
 
     # Write uploaded bytes to a real temp file (fitz needs a file path)
     suffix = ".pdf"
