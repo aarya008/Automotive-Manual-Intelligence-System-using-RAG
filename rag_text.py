@@ -45,19 +45,14 @@ def load_and_split_pdf(path: str):
 
 def build_vectorstore(documents, embeddings, persist_dir: str):
     if os.path.exists(persist_dir):
-        print("Loading existing vector DB...")
-        vectordb = Chroma(
-            persist_directory=persist_dir,
-            embedding_function=embeddings
-        )
-    else:
-        print("Creating new vector DB...")
-        vectordb = Chroma.from_documents(
-            documents=documents,
-            embedding=embeddings,
-            persist_directory=persist_dir
-        )
+        import shutil
+        shutil.rmtree(persist_dir)
 
+    vectordb = Chroma.from_documents(
+        documents=documents,
+        embedding=embeddings,
+        persist_directory=persist_dir
+    )
     return vectordb
     
 
@@ -92,8 +87,7 @@ def load_system_prompt(path: str) -> str:
 
 
 def build_prompt(context, history, question):
-    SYSTEM_PROMPT_PATH = r"E:\Workspace\Projects\Owners_manual\.venv\RAG_pipeline_text\system_prompt.txt"
-
+    SYSTEM_PROMPT_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "system_prompt.txt")
     system_prompt = load_system_prompt(SYSTEM_PROMPT_PATH)
 
     return f"""

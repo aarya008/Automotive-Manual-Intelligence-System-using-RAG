@@ -245,7 +245,7 @@ def docs_from_hybrid_chunks(chunks: List[Dict]) -> List[Document]:
                     "end_page": chunk["end_page"],
                     "chunk_index": chunk["chunk_index"],
                     "total_chunks": chunk["total_chunks_in_section"],
-                    "vehicle_systems": chunk["vehicle_systems"],
+                    "vehicle_systems": ", ".join(chunk["vehicle_systems"]),
                     "content_type": chunk["content_type"],
                     "safety_level": chunk["safety_level"],
                     "has_procedure": chunk["has_procedure"],

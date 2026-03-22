@@ -1,7 +1,7 @@
 import rag_text as rag
 
 PERSIST_DIR = "db"
-PDF_PATH = "C:\\Users\\Aarya\\Downloads\\Swift_Owner's_Manual.pdf"
+PDF_PATH = r"C:\Users\Aarya\Downloads\virtus-user-manual-27nov23.pdf"
 
 # --- Build index ONCE ---
 embeddings = rag.get_embeddings()
