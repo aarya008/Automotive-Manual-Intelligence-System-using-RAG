@@ -4,225 +4,207 @@ import os
 import shutil
 import rag_text as rag
 
-# ─────────────────────────────────────────────
-# PAGE CONFIG
-# ─────────────────────────────────────────────
 st.set_page_config(
-    page_title="Automotive Manual Assistant",
+    page_title="AutoManual AI",
     page_icon="🚗",
-    layout="wide"
+    layout="wide",
+    initial_sidebar_state="expanded"
 )
 
 # ─────────────────────────────────────────────
-# SESSION STATE INIT
+# SESSION STATE
 # ─────────────────────────────────────────────
 def clear_temp_db():
-    PERSIST_DIR = "/tmp/temp_db"
-    if os.path.exists(PERSIST_DIR):
+    if os.path.exists("/tmp/temp_db"):
         try:
-            shutil.rmtree(PERSIST_DIR)
-            st.write("✅ Cleared persistent vector store from temp_db")
-        except Exception as e:
-            st.warning(f"Could not remove temp_db: {e}")
-
+            shutil.rmtree("/tmp/temp_db")
+        except Exception:
+            pass
 
 def init_session_state():
-    if "retriever" not in st.session_state:
-        st.session_state.retriever = None
-    if "llm" not in st.session_state:
-        st.session_state.llm = None
-    if "embeddings" not in st.session_state:
-        st.session_state.embeddings = None
-    if "history" not in st.session_state:
-        st.session_state.history = []
-    if "chat_messages" not in st.session_state:
-        st.session_state.chat_messages = []
-    if "pdf_name" not in st.session_state:
-        st.session_state.pdf_name = None
-    if "chunk_count" not in st.session_state:
-        st.session_state.chunk_count = 0
-    if "last_retrieved_docs" not in st.session_state:
-        st.session_state.last_retrieved_docs = []
-
+    defaults = {
+        "retriever": None,
+        "history": [],
+        "chat_messages": [],
+        "pdf_name": None,
+        "chunk_count": 0,
+        "last_retrieved_docs": []
+    }
+    for k, v in defaults.items():
+        if k not in st.session_state:
+            st.session_state[k] = v
 
 init_session_state()
 
-# register cleanup callback to clear built DB at session end
-if "session_cleanup_registered" not in st.session_state:
-    st.session_state.session_cleanup_registered = True
+if "cleanup_registered" not in st.session_state:
+    st.session_state.cleanup_registered = True
     try:
         st.on_session_end(clear_temp_db)
     except Exception:
-        # Fallback: degrade gracefully if Streamlit version doesn't support on_session_end
         pass
 
-# if no session state data, ensure stale DB is removed on app start
 if st.session_state.retriever is None:
     clear_temp_db()
 
+
 # ─────────────────────────────────────────────
-# LOAD MODELS ONCE (cached across reruns)
+# MODELS
 # ─────────────────────────────────────────────
 @st.cache_resource(show_spinner=False)
 def load_models():
-    """Load embeddings and LLM once. Cached by Streamlit."""
     embeddings = rag.get_embeddings()
     llm = rag.get_llm()
     return embeddings, llm
+
 
 # ─────────────────────────────────────────────
 # PDF PROCESSING
 # ─────────────────────────────────────────────
 def process_pdf(uploaded_file):
-    """Save uploaded file to temp, build vector DB, return retriever."""
-    PERSIST_DIR = "/tmp/temp_db"
-
-    # Write uploaded bytes to a real temp file (fitz needs a file path)
-    suffix = ".pdf"
-    with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as tmp:
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp:
         tmp.write(uploaded_file.read())
         tmp_path = tmp.name
-
     try:
         documents = rag.load_and_split_pdf(tmp_path)
         embeddings, _ = load_models()
         vectordb = rag.build_vectorstore(
             documents=documents,
             embeddings=embeddings,
-            persist_dir=PERSIST_DIR,
-            
+            persist_dir="/tmp/temp_db",
         )
-        retriever = rag.get_retriever(vectordb)
-        return retriever, len(documents)
+        return rag.get_retriever(vectordb), len(documents)
     finally:
-        os.unlink(tmp_path)  # always clean up temp file
+        os.unlink(tmp_path)
+
 
 # ─────────────────────────────────────────────
 # SIDEBAR
 # ─────────────────────────────────────────────
 with st.sidebar:
-    st.title("🚗 Manual Assistant")
-    st.markdown("---")
 
-    # PDF uploader
+    st.markdown("## 🚗 Owners Manual Assistant ")
+    st.caption("RAG-powered Q&A for your vehicle's manual. Upload your PDF and start asking!")
+    st.divider()
+
     uploaded_file = st.file_uploader(
-        "Upload your vehicle owner's manual",
+        "Upload Owner's Manual (PDF)",
         type=["pdf"],
-        help="PDF with a clickable Table of Contents works best"
+        help="Must have a clickable Table of Contents"
     )
 
-    if uploaded_file is not None:
-        # Show upload button only if it's a new file
-        is_new_file = uploaded_file.name != st.session_state.pdf_name
-
-        if is_new_file:
+    if uploaded_file:
+        is_new = uploaded_file.name != st.session_state.pdf_name
+        if is_new:
             if st.button("⚡ Process Manual", type="primary", use_container_width=True):
-                with st.spinner("Parsing PDF and building index... (~30 sec for large manuals)"):
+                with st.spinner("Parsing PDF and building index…"):
                     try:
-                        retriever, chunk_count = process_pdf(uploaded_file)
-
-                        # Update session state
+                        retriever, count = process_pdf(uploaded_file)
                         st.session_state.retriever = retriever
                         st.session_state.history = []
                         st.session_state.chat_messages = []
                         st.session_state.pdf_name = uploaded_file.name
-                        st.session_state.chunk_count = chunk_count
+                        st.session_state.chunk_count = count
                         st.session_state.last_retrieved_docs = []
-
-                        st.success(f"✅ Ready! Indexed {chunk_count} chunks.")
                         st.rerun()
-
                     except ValueError as e:
-                        st.error(f"❌ PDF Error: {e}\n\nMake sure your PDF has a clickable Table of Contents.")
+                        st.error(f"PDF Error: {e}")
                     except Exception as e:
-                        st.error(f"❌ Unexpected error: {e}")
+                        st.error(f"Error: {e}")
         else:
-            st.success(f"✅ **{uploaded_file.name}** is loaded")
+            st.success(f"✅ {uploaded_file.name}")
 
-    st.markdown("---")
+    st.divider()
 
-    # Current file info
     if st.session_state.pdf_name:
-        st.markdown("**📄 Current Manual**")
+        st.markdown("**Active Manual**")
         st.caption(st.session_state.pdf_name)
-        st.caption(f"Chunks indexed: {st.session_state.chunk_count}")
 
-        if st.button("🗑️ Clear & Upload New", use_container_width=True):
-            st.session_state.retriever = None
-            st.session_state.history = []
-            st.session_state.chat_messages = []
-            st.session_state.pdf_name = None
+        col1, col2 = st.columns(2)
+        with col1:
+            st.metric("Chunks", st.session_state.chunk_count)
+        with col2:
+            st.metric("Messages", len(st.session_state.chat_messages) // 2)
+
+        st.divider()
+        if st.button("🗑️ Clear Session", use_container_width=True):
+            for key in ["retriever", "history", "chat_messages", "pdf_name", "last_retrieved_docs"]:
+                st.session_state[key] = [] if isinstance(st.session_state[key], list) else None
             st.session_state.chunk_count = 0
-            st.session_state.last_retrieved_docs = []
-            # Clean up DB folder
-            if os.path.exists("./temp_db"):
-                shutil.rmtree("./temp_db")
+            clear_temp_db()
             st.rerun()
     else:
         st.info("No manual loaded yet.")
 
-    st.markdown("---")
-    st.caption("Powered by Gemini 2.5 Flash + HuggingFace Embeddings")
 
 # ─────────────────────────────────────────────
 # MAIN AREA
 # ─────────────────────────────────────────────
-st.title("🚗 Automotive Manual Intelligence")
 
 if st.session_state.retriever is None:
-    # Empty state
-    st.markdown("### 👈 Upload a PDF manual from the sidebar to get started")
-    st.markdown("""
-    **What this app does:**
-    - Parses your vehicle owner's manual using intelligent TOC-based chunking
-    - Builds a semantic search index over all sections
-    - Answers your questions with source citations from the actual manual
 
-    **Tips for best results:**
-    - Use the official PDF from the manufacturer's website
-    - Your PDF must have a clickable Table of Contents
-    - Ask specific questions: *"How do I reset the tire pressure warning?"*
-    """)
+    st.markdown("# Ask Your Car Manual")
+    st.markdown("##### Get instant, accurate answers from your vehicle's owner manual — powered by RAG.")
+    st.divider()
+
+    c1, c2, c3 = st.columns(3)
+    with c1:
+        st.markdown("### 🔍 Semantic Search")
+        st.caption("Understands your question the way you naturally phrase it — not just keyword matching.")
+    with c2:
+        st.markdown("### 📌 Source Citations")
+        st.caption("Every answer cites the exact section and page numbers from the manual.")
+    with c3:
+        st.markdown("### ⚡ TOC-Aware Chunking")
+        st.caption("Respects the document's Table of Contents for precise, context-aware retrieval.")
+
+    st.divider()
+    st.markdown("#### 💬 Example questions")
+
+    q1, q2, q3 = st.columns(3)
+    with q1:
+        st.code("How do I jump start the car?", language=None)
+        st.code("What does the ABS warning light mean?", language=None)
+    with q2:
+        st.code("How often should I change the engine oil?", language=None)
+        st.code("How do I engage reverse on a manual gearbox?", language=None)
+    with q3:
+        st.code("My engine makes noise after cold start — normal?", language=None)
+        st.code("What is the correct tyre pressure?", language=None)
 
 else:
-    # Load models (cached, instant after first load)
     _, llm = load_models()
 
-    # ── Chat history display ──
+    st.markdown("### 💬 Chat with your Manual")
+
+    if st.session_state.last_retrieved_docs:
+        with st.expander("📎 Sources used in last answer", expanded=False):
+            for i, doc in enumerate(st.session_state.last_retrieved_docs):
+                m = doc.metadata
+                safety = m.get("safety_level", "none")
+                cols = st.columns([3, 1, 1, 1])
+                cols[0].markdown(f"**{m.get('section_name', 'Unknown')}**")
+                cols[1].caption(f"p.{m.get('start_page','?')}–{m.get('end_page','?')}")
+                cols[2].caption(m.get("content_type", "—").capitalize())
+                if safety != "none":
+                    cols[3].warning(safety)
+                else:
+                    cols[3].caption("—")
+                st.divider()
+
     for msg in st.session_state.chat_messages:
         with st.chat_message(msg["role"]):
             st.markdown(msg["content"])
 
-    # ── Sources expander for last answer ──
-    if st.session_state.last_retrieved_docs:
-        with st.expander("📄 Sources from last answer", expanded=False):
-            for i, doc in enumerate(st.session_state.last_retrieved_docs):
-                meta = doc.metadata
-                safety = meta.get("safety_level", "none")
-                safety_badge = f"⚠️ {safety}" if safety != "none" else ""
-                st.markdown(
-                    f"**[{i+1}] {meta.get('section_name', 'Unknown')}** "
-                    f"— Pages {meta.get('start_page', '?')}–{meta.get('end_page', '?')} "
-                    f"{safety_badge}"
-                )
-                st.caption(f"Systems: {meta.get('vehicle_systems', '')} | "
-                           f"Type: {meta.get('content_type', '?')}")
-                st.markdown("---")
-
-    # ── Chat input ──
-    user_query = st.chat_input("Ask anything about your vehicle manual...")
+    user_query = st.chat_input("Ask anything about your vehicle manual…")
 
     if user_query:
-        # Display user message immediately
         with st.chat_message("user"):
             st.markdown(user_query)
         st.session_state.chat_messages.append({"role": "user", "content": user_query})
 
-        # Generate answer
         with st.chat_message("assistant"):
-            with st.spinner("Searching manual..."):
+            with st.spinner("Searching manual…"):
                 try:
-                    # Get retrieved docs separately so we can show sources
                     docs = st.session_state.retriever.invoke(user_query)
                     st.session_state.last_retrieved_docs = docs
 
@@ -232,14 +214,13 @@ else:
                         llm=llm,
                         history=st.session_state.history
                     )
-
                     st.markdown(answer)
                     st.session_state.chat_messages.append({"role": "assistant", "content": answer})
                     st.session_state.history = updated_history
 
                 except Exception as e:
-                    error_msg = f"Something went wrong: {e}"
-                    st.error(error_msg)
-                    st.session_state.chat_messages.append({"role": "assistant", "content": error_msg})
+                    err = f"Something went wrong: {e}"
+                    st.error(err)
+                    st.session_state.chat_messages.append({"role": "assistant", "content": err})
 
         st.rerun()
